@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="个性名片助手：一点表情，一点时间，好好工作，也好好生活。">
+<title>个性名片助手</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:#f3f3ed;color:#263c35;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;padding:24px}main{width:min(100%,620px);padding:56px 40px;background:#fffef8;border:1px solid #dedfd5;border-radius:24px}small{letter-spacing:.15em;color:#6c7c70}.icon{font-size:52px;margin:32px 0 20px}h1{font-size:clamp(26px,5vw,38px);line-height:1.4;font-weight:600;margin:0 0 20px}p{line-height:1.9;color:#627167}footer{margin-top:40px;font-size:13px;color:#7a8278}hr{border:0;border-top:1px solid #e6e7de;margin:32px 0}
+</style>
+<main><small>个性名片助手</small><div class="icon" id="icon">☕</div><h1 id="title">好好工作，也好好生活。</h1><p>给忙碌留一点节奏，给生活留一点时间。</p><hr><p id="clock" aria-live="polite"></p><footer>按北京时间、工作日 18:00 计算 · 不包含法定节假日调整</footer></main>
+<script>
+function update(){
+const now=new Date();
+const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Shanghai',weekday:'short',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).formatToParts(now).map(p=>[p.type,p.value]));
+const weekend=['Sat','Sun'].includes(parts.weekday);
+const remaining=Math.max(0,18*3600-(Number(parts.hour)*3600+Number(parts.minute)*60+Number(parts.second)));
+const minutes=Math.ceil(remaining/60);
+document.getElementById('title').textContent=weekend?'周末充电中，好好生活':minutes?`距离下班还有 ${Math.floor(minutes/60)} 小时 ${minutes%60} 分钟`:'今日收工，明天见';
+document.getElementById('icon').textContent=weekend?'🌿':minutes?'☕':'🌙';
+document.getElementById('clock').textContent='北京时间 '+new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',dateStyle:'full',timeStyle:'short'}).format(now);
+}update();setInterval(update,1000);
+</script>
+</html>
